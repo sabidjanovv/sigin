@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, updateUser } from "../../redux/slices/user-slice"; // Corrected import
+import { addUser, updateUser } from "../../redux/slices/user-slice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const users = useSelector((s) => s.user.value); // Foydalanuvchilarni olish
+  const users = useSelector((s) => s.user.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const paramsId = useLocation().search.split("=")[1]; // URL'dan `id` olish
+  const paramsId = useLocation().search.split("=")[1];
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,14 +19,14 @@ const Register = () => {
     if (paramsId) {
       const userToEdit = users.find((user) => user.id === Number(paramsId));
       if (userToEdit) {
-        setFormData(userToEdit); // Tahrirlash uchun mavjud foydalanuvchi ma'lumotlarini o'rnatish
+        setFormData(userToEdit);
       }
     }
   }, [paramsId, users]);
 
   const handleChange = (e) => {
-    const {value, name} = e.target;
-    setFormData({ ...formData, [name]:value });
+    const { value, name } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -34,7 +34,6 @@ const Register = () => {
 
     try {
       if (paramsId) {
-        // Tahrirlash rejimi
         const duplicateUser = users.find(
           (item) =>
             item.username === formData.username && item.id !== Number(paramsId)
@@ -47,7 +46,6 @@ const Register = () => {
         await dispatch(updateUser({ ...formData, id: Number(paramsId) }));
         alert("User updated successfully!");
       } else {
-        // Yangi foydalanuvchi qo'shish rejimi
         if (
           users.findIndex((item) => item.username === formData.username) >= 0
         ) {
@@ -57,21 +55,19 @@ const Register = () => {
         await dispatch(addUser({ ...formData, id: new Date().getTime() }));
         alert("User registered successfully!");
       }
-      navigate("/login"); // Login sahifasiga yo'naltirish
+      navigate("/login");
     } catch (error) {
       console.error("Error in handleSubmit:", error);
     }
   };
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white shadow-md rounded-lg p-6 w-full max-w-sm">
-        <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+      <div className="bg-white shadow-2xl rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6 drop-shadow-lg">
           {paramsId ? "Edit User" : "Register"}
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label
               htmlFor="name"
@@ -131,15 +127,15 @@ const Register = () => {
           </div>
           <button
             type="submit"
-            className="w-full py-2 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 shadow-lg transform hover:scale-105 transition duration-300"
           >
             {paramsId ? "Update User" : "Register"}
           </button>
-          <p className="text-center text-gray-500 mt-2">
+          <p className="text-center text-gray-500 mt-4">
             {paramsId ? (
               <Link
                 to="/register"
-                className="text-blue-500 hover:underline focus:outline-none"
+                className="text-indigo-600 hover:underline hover:text-indigo-700 transition"
               >
                 Create New User
               </Link>
@@ -148,7 +144,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <Link
                   to="/login"
-                  className="text-blue-500 hover:underline focus:outline-none"
+                  className="text-indigo-600 hover:underline hover:text-indigo-700 transition"
                 >
                   Login
                 </Link>
